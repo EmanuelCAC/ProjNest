@@ -163,6 +163,30 @@ describe('UserValidator uit tests', () => {
       ])
     })
   })
+
+  describe('CreatedAt field', () => {
+    it('CreatedAt field is a number - error', ()  => {
+      const isValid = sut.validate({
+        ...props,
+        createdAt: 10 as any,
+      })
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance'
+      ])
+    })
+
+    it('CreatedAt field is a string - error', ()  => {
+      const isValid = sut.validate({
+        ...props,
+        createdAt: '2024' as any,
+      })
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance'
+      ])
+    })
+  })
 })
 
 
@@ -175,7 +199,7 @@ describe('UserValidator uit tests', () => {
 
 
 
-
+// { createdAt: [ 'createdAt must be a Date instance' ] }
 
 // {
 //   name: [
