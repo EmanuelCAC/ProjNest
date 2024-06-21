@@ -1,6 +1,6 @@
 import { UserDataBuilder } from "@/users/domain/testing/helpers/user-data-builder"
-import { 
-  UserRules, 
+import {
+  UserRules,
   UserValidator,
   UserValidatorFactory
 } from "../../user.validator"
@@ -15,7 +15,7 @@ describe('UserValidator uit tests', () => {
     props = UserDataBuilder({})
   })
 
-  it('Validade case for user validator class', () => {
+  it('Valid case for user validator class', () => {
     const isValid = sut.validate(props)
     expect(isValid).toBeTruthy()
     expect(sut.validatedData).toStrictEqual(new UserRules(props))
@@ -27,7 +27,7 @@ describe('UserValidator uit tests', () => {
       expect(isValid).toBeFalsy()
       expect(sut.errors['name']).toStrictEqual([
         'name should not be empty',
-        'name must be a string',   
+        'name must be a string',
         'name must be shorter than or equal to 255 characters'
       ])
     })
@@ -50,7 +50,7 @@ describe('UserValidator uit tests', () => {
       })
       expect(isValid).toBeFalsy()
       expect(sut.errors['name']).toStrictEqual([
-        'name must be a string',   
+        'name must be a string',
         'name must be shorter than or equal to 255 characters'
       ])
     })
@@ -61,14 +61,19 @@ describe('UserValidator uit tests', () => {
         name: 'a'.repeat(256) as any
       })
       expect(isValid).toBeFalsy()
-      expect(sut.errors['name']).toStrictEqual([ 
-        'name must be shorter than or equal to 255 characters'
+      expect(sut.errors['name']).toStrictEqual([        'name must be shorter than or equal to 255 characters'
       ])
+    })
+
+    it('Name field is valid', () => {
+      const isValid = sut.validate(props)
+      expect(isValid).toBeTruthy()
+      expect(sut.validatedData).toStrictEqual(new UserRules(props))
     })
   })
 
-  describe('Email field', () => {
-    it('Email field is null - error', () => {
+  describe('email field', () => {
+    it('email field is null - error', () => {
       const isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors['email']).toStrictEqual([
@@ -79,7 +84,7 @@ describe('UserValidator uit tests', () => {
       ])
     })
 
-    it('Email field is empty - error', () => {
+    it('email field is empty - error', () => {
       const isValid = sut.validate({
         ...props,
         email: '' as any
@@ -91,7 +96,7 @@ describe('UserValidator uit tests', () => {
       ])
     })
 
-    it('Email field is a number - error', () => {
+    it('email field is a number - error', () => {
       const isValid = sut.validate({
         ...props,
         email: 10 as any
@@ -104,68 +109,80 @@ describe('UserValidator uit tests', () => {
       ])
     })
 
-    it('Email field is larger than 255 characters - error', () => {
+    it('email field is larger than 255 characters - error', () => {
       const isValid = sut.validate({
         ...props,
         email: 'a'.repeat(256) as any
       })
       expect(isValid).toBeFalsy()
-      expect(sut.errors['email']).toStrictEqual([ 
+      expect(sut.errors['email']).toStrictEqual([
         'email must be shorter than or equal to 255 characters',
         'email must be an email'
       ])
     })
-    
+
+    it('email field is valid', () => {
+      const isValid = sut.validate(props)
+      expect(isValid).toBeTruthy()
+      expect(sut.validatedData).toStrictEqual(new UserRules(props))
+    })
   })
 
-  describe('Password field', () => {
-    it('Password field is null - error', () => {
+  describe('password field', () => {
+    it('password field is null - error', () => {
       const isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors['password']).toStrictEqual([
         'password should not be empty',
         'password must be a string',
-        'password must be shorter than or equal to 255 characters'
+        'password must be shorter than or equal to 255 characters',
       ])
     })
 
-    it('Password field is empty - error', () => {
+    it('password field is empty - error', () => {
       const isValid = sut.validate({
-        ...props,
+        ...UserDataBuilder({}),
         password: '' as any
       })
       expect(isValid).toBeFalsy()
       expect(sut.errors['password']).toStrictEqual([
-        'password should not be empty'
+        'password should not be empty',
       ])
     })
 
-    it('Password field is a number - error', () => {
+    it('password field is a number - error', () => {
       const isValid = sut.validate({
-        ...props,
+        ...UserDataBuilder({}),
         password: 10 as any
       })
       expect(isValid).toBeFalsy()
       expect(sut.errors['password']).toStrictEqual([
-        'password must be a string',   
+        'password must be a string',
         'password must be shorter than or equal to 255 characters'
       ])
     })
 
-    it('Password field is larger than 255 characters - error', () => {
+    it('password field is larger than 100 characters - error', () => {
       const isValid = sut.validate({
-        ...props,
-        password: 'a'.repeat(256) as any
+        ...UserDataBuilder({}),
+        password: 'a'.repeat(256)
       })
       expect(isValid).toBeFalsy()
-      expect(sut.errors['password']).toStrictEqual([ 
-        'password must be shorter than or equal to 255 characters'
+      expect(sut.errors['password']).toStrictEqual([
+        'password must be shorter than or equal to 255 characters',
       ])
+    })
+
+    it('password field is valid', () => {
+      const props = UserDataBuilder({})
+      const isValid = sut.validate(props)
+      expect(isValid).toBeTruthy()
+      expect(sut.validatedData).toStrictEqual(new UserRules(props))
     })
   })
 
   describe('CreatedAt field', () => {
-    it('CreatedAt field is a number - error', ()  => {
+    it('CreatedAt field is a number - error', () => {
       const isValid = sut.validate({
         ...props,
         createdAt: 10 as any,
@@ -176,7 +193,7 @@ describe('UserValidator uit tests', () => {
       ])
     })
 
-    it('CreatedAt field is a string - error', ()  => {
+    it('CreatedAt field is a sting - error', () => {
       const isValid = sut.validate({
         ...props,
         createdAt: '2024' as any,
@@ -188,16 +205,6 @@ describe('UserValidator uit tests', () => {
     })
   })
 })
-
-
-
-
-
-
-
-
-
-
 
 // { createdAt: [ 'createdAt must be a Date instance' ] }
 
